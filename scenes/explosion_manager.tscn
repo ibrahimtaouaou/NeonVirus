@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://coxlk5v5we3pw"]
+
+[ext_resource type="Script" uid="uid://c2mjbgyw6y580" path="res://scripts/explosion_manager.gd" id="1_2x176"]
+
+[node name="ExplosionManager" type="Node2D" unique_id=692319797]
+script = ExtResource("1_2x176")
+
+[node name="ExplosionTemplate" type="CPUParticles2D" parent="." unique_id=4788847]
+emitting = false
+amount = 75
+one_shot = true
+preprocess = 0.2
+explosiveness = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 175.0
+initial_velocity_max = 175.0

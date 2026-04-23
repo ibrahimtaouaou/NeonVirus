@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://r437i30nv2ic"]
+
+[ext_resource type="PackedScene" uid="uid://cm1dirfgoot8l" path="res://scenes/base_enemy.tscn" id="1_hu2wp"]
+
+[node name="BaseEnemy" unique_id=601798470 instance=ExtResource("1_hu2wp")]
+speed = 300.0
+health = null
+contact_damage = null
+enemy_color = null
+
+[node name="Body" parent="." index="0" unique_id=1121855645]
+color = Color(0, 0.8216351, 0.13156626, 0.21176471)
+polygon = PackedVector2Array(-9.536743e-07, 0, -11.999999, 32, -7.9999986, 28, -3.9999986, 32, 1.2239188e-06, 28, 4.0000014, 32, 8.000001, 28, 12.000001, 32)
+
+[node name="MainCollision" parent="." index="1" unique_id=2038527464]
+position = Vector2(-40, 0)
+
+[node name="SeparationArea" parent="." index="2" unique_id=1676797749]
+visible = false
+
+[node name="ScreenNotifier" parent="." index="3" unique_id=1438331648]
+position = Vector2(-40, 0)
+rect = Rect2(-40, -32, 88, 64)
+
+[node name="Trail" parent="." index="4" unique_id=1296023108]
+position = Vector2(-56, 0)
+
+[node name="Line2D" parent="." index="5" unique_id=1787125758]
+points = PackedVector2Array(0, 0, -23.999998, 64, -15.999997, 56, -7.999997, 64, 2.4478377e-06, 56, 8.000003, 64, 16.000002, 56, 24.000002, 64)
+default_color = Color(0.30832204, 1.0379223, 0.43673623, 1)

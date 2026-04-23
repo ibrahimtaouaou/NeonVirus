@@ -1,0 +1,155 @@
+[gd_scene format=3 uid="uid://coar0w52ewb50"]
+
+[ext_resource type="Script" uid="uid://cii5hxk58i6ok" path="res://scripts/main.gd" id="1_jyhfs"]
+[ext_resource type="Shader" uid="uid://belw8qlsouegj" path="res://shaders/grid_shader.gdshader" id="1_o5qli"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_0wfyh"]
+[ext_resource type="Script" uid="uid://dymxf0txidqa8" path="res://scripts/player.gd" id="2_sugp2"]
+[ext_resource type="PackedScene" uid="uid://cm1dirfgoot8l" path="res://scenes/base_enemy.tscn" id="5_tbgi4"]
+[ext_resource type="Script" uid="uid://cm4fnplj523tw" path="res://scripts/enemy_manager.gd" id="5_tefeu"]
+[ext_resource type="PackedScene" uid="uid://r437i30nv2ic" path="res://scenes/fast_enemy.tscn" id="7_o6xl0"]
+[ext_resource type="Script" uid="uid://bbfvk716wtib3" path="res://scripts/game_ui.gd" id="8_tipki"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_0wfyh"]
+shader = ExtResource("1_o5qli")
+shader_parameter/line_color = Color(0, 1.5720325, 1.5720325, 1)
+shader_parameter/grid_spacing = 100.0
+shader_parameter/thickness = 0.02
+shader_parameter/camera_offset = Vector2(0, 0)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sugp2"]
+radius = 73.756355
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_choun"]
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ya4ey"]
+bg_color = Color(2.1414335, 6.364704, 7.532843, 1)
+corner_radius_top_left = 5
+corner_radius_top_right = 5
+corner_radius_bottom_right = 5
+corner_radius_bottom_left = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tipki"]
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.04, 0.04, 0.04, 1)
+border_blend = true
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_85g3d"]
+bg_color = Color(0.82, 0.024599977, 0.024599977, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="Environment" id="Environment_sgp6g"]
+background_mode = 3
+glow_enabled = true
+glow_intensity = 1.2
+glow_bloom = 0.5
+glow_blend_mode = 0
+glow_hdr_scale = 1.0
+
+[node name="Main" type="Node2D" unique_id=687418448]
+script = ExtResource("1_jyhfs")
+
+[node name="Background" type="CanvasLayer" parent="." unique_id=991222796]
+layer = -100
+
+[node name="GridShader" type="ColorRect" parent="Background" unique_id=7733979]
+material = SubResource("ShaderMaterial_0wfyh")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="World" type="Node2D" parent="." unique_id=309997376]
+
+[node name="Player" type="CharacterBody2D" parent="World" unique_id=4233256 groups=["player"]]
+script = ExtResource("2_sugp2")
+
+[node name="Camera2D" type="Camera2D" parent="World/Player" unique_id=1533083154]
+zoom = Vector2(0.5, 0.5)
+process_callback = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="World/Player" unique_id=1142842067]
+texture = ExtResource("2_0wfyh")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Player" unique_id=620973042]
+shape = SubResource("CircleShape2D_sugp2")
+
+[node name="EnemyManager" type="Node2D" parent="World" unique_id=1868515040]
+script = ExtResource("5_tefeu")
+enemy_templates = Array[PackedScene]([ExtResource("5_tbgi4"), ExtResource("7_o6xl0")])
+
+[node name="SpawnTimer" type="Timer" parent="World/EnemyManager" unique_id=1779822145]
+wait_time = 0.5
+autostart = true
+
+[node name="ProjectileManager" type="Node2D" parent="World" unique_id=128904784]
+
+[node name="ExperienceManager" type="Node2D" parent="World" unique_id=273131]
+
+[node name="GameUI" type="CanvasLayer" parent="." unique_id=349801527]
+script = ExtResource("8_tipki")
+
+[node name="HUD" type="Control" parent="GameUI" unique_id=934761942]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="XPBar" type="ProgressBar" parent="GameUI/HUD" unique_id=1986720272]
+layout_mode = 0
+offset_left = 168.0
+offset_top = 80.0
+offset_right = 624.0
+offset_bottom = 107.0
+theme_override_constants/outline_size = 10
+theme_override_styles/background = SubResource("StyleBoxFlat_choun")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ya4ey")
+show_percentage = false
+
+[node name="HPBar" type="ProgressBar" parent="GameUI/HUD" unique_id=232496266]
+layout_mode = 0
+offset_left = 32.0
+offset_top = 1232.0
+offset_right = 248.0
+offset_bottom = 1259.0
+theme_override_styles/background = SubResource("StyleBoxFlat_tipki")
+theme_override_styles/fill = SubResource("StyleBoxFlat_85g3d")
+value = 100.0
+show_percentage = false
+
+[node name="LevelLabel" type="Label" parent="GameUI/HUD" unique_id=2070726729]
+layout_mode = 0
+offset_left = 80.0
+offset_top = 80.0
+offset_right = 184.0
+offset_bottom = 160.0
+text = "LVL"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=348541839]
+environment = SubResource("Environment_sgp6g")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1368970407]
+position = Vector2(560, 152)
+texture = ExtResource("2_0wfyh")
+
+[connection signal="timeout" from="World/EnemyManager/SpawnTimer" to="World/EnemyManager" method="_on_spawn_timer_timeout"]

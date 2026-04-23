@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://cm1dirfgoot8l"]
+
+[ext_resource type="Script" uid="uid://dtwhgdqkgp8nq" path="res://scripts/base_enemy.gd" id="1_48uxq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7p1mj"]
+radius = 25.298222
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_md0e3"]
+radius = 80.399
+
+[sub_resource type="Curve" id="Curve_7p1mj"]
+_data = [Vector2(0.010638304, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[node name="BaseEnemy" type="Area2D" unique_id=601798470]
+light_mask = 5
+visibility_layer = 2
+script = ExtResource("1_48uxq")
+
+[node name="Body" type="Polygon2D" parent="." unique_id=1121855645]
+rotation = 1.5707964
+scale = Vector2(2, 2)
+color = Color(0.9891322, 0.38130873, 1, 0.21176471)
+polygon = PackedVector2Array(-9.536743e-07, 0, -4.000001, 20, -24, 36, -24, 52, 0, 44, 24, 52, 24, 36, 3.999999, 20)
+
+[node name="MainCollision" type="CollisionShape2D" parent="." unique_id=2038527464]
+position = Vector2(-64, 0)
+shape = SubResource("CircleShape2D_7p1mj")
+
+[node name="SeparationArea" type="Area2D" parent="." unique_id=1676797749]
+light_mask = 2
+visibility_layer = 0
+
+[node name="SeparationShape" type="CollisionShape2D" parent="SeparationArea" unique_id=1041945156]
+position = Vector2(-64, 0)
+shape = SubResource("CircleShape2D_md0e3")
+
+[node name="ScreenNotifier" type="VisibleOnScreenNotifier2D" parent="." unique_id=1438331648]
+position = Vector2(-64, 0)
+rect = Rect2(-56, -56, 128, 112)
+
+[node name="Trail" type="CPUParticles2D" parent="." unique_id=1296023108]
+modulate = Color(1, 1, 2, 1)
+position = Vector2(-88, 0)
+amount = 15
+lifetime = 0.5
+direction = Vector2(-1, 0)
+spread = 10.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 100.0
+scale_amount_min = 2.0
+scale_amount_max = 2.0
+scale_amount_curve = SubResource("Curve_7p1mj")
+color = Color(0.41167733, 1.8814579, 0.5172903, 1)
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1787125758]
+rotation = 1.5707964
+points = PackedVector2Array(0, 0, -8, 40, -48, 72, -48, 104, 0, 88, 48, 104, 48, 72, 8, 40)
+closed = true
+width = 3.0
+default_color = Color(0.922, 0.348, 2, 1)
+antialiased = true
+
+[node name="ExplosionParticles" type="CPUParticles2D" parent="." unique_id=563965833]
+position = Vector2(-64, 0)
+emitting = false
+amount = 50
+one_shot = true
+explosiveness = 1.0
+spread = 180.0
+gravity = Vector2(0, 0)
+initial_velocity_min = 150.0
+initial_velocity_max = 150.0
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="screen_exited" from="ScreenNotifier" to="." method="_on_screen_notifier_screen_exited"]
