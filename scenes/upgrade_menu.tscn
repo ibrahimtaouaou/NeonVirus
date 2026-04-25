@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://bp220ho4ms13y"]
+
+[ext_resource type="Script" uid="uid://colaxxkgunawe" path="res://scripts/upgrade_menu.gd" id="1_e3qxy"]
+[ext_resource type="FontFile" uid="uid://cwybiqnpntt7f" path="res://assets/Xolonium-Regular.ttf" id="2_ksfom"]
+
+[node name="UpgradeMenu" type="CanvasLayer" unique_id=2054744810]
+process_mode = 3
+script = ExtResource("1_e3qxy")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1298374689]
+offset_right = 720.0
+offset_bottom = 1280.0
+color = Color(0, 0, 0, 0.59607846)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=990370878]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=698322352]
+layout_mode = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=135271704]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_ksfom")
+text = "Choose an upgrade !"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=258139904]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1

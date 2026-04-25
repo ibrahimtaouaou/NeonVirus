@@ -2,17 +2,20 @@ extends CharacterBody2D
 
 @export_group("Stats")
 @export var speed = 300.0
-@export var max_health: float = 100.0
+@export var max_health: float = 1500.0
 @export var xp_to_level: float = 10.0
 
 @onready var camera: Camera2D = $Camera2D
+#@onready var level_label: Label = $"../../GameUI/HUD/LevelLabel"
 
 signal health_changed(new_val, max_val)
 signal xp_changed(new_val, max_val)
+signal leveled_up(new_level)
 
-var current_health: float = 100.0
+var current_health: float = 1500.0
 var current_xp: float = 0.0
 var current_level: int = 1
+var levels_pending: int = 0
 
 func _physics_process(_delta):
 	# On récupère les directions (touches fléchées, ZQSD ou Joystick mobile)
@@ -42,3 +45,37 @@ func die():
 	print("Game Over")
 	# Pour l'instant on reload juste la scène
 	get_tree().reload_current_scene()
+
+
+func _on_grab_area_area_entered(area: Area2D) -> void:
+	if area.has_method("collect"):
+			area.collect(self)
+
+func add_xp(amount):
+	current_xp += amount
+	while current_xp >= xp_to_level:
+		current_xp -= xp_to_level
+		levels_pending += 1
+		level_up()
+	xp_changed.emit(current_xp, xp_to_level)
+
+func level_up():
+	current_level += 1
+	leveled_up.emit(current_level)
+	xp_to_level *= 1.2 # Le niveau suivant est 20% plus dur
+	#level_label.text = "Level : %s"  %current_level
+	print("LEVEL UP ! Niveau : ", current_level)
+
+func apply_upgrade(upgrade: UpgradeData):
+	match upgrade.type:
+		"speed":
+			print("add speed")
+			speed *= upgrade.value # Augmente la vitesse de 20% si valeur = 1.2
+		"health":
+			print("add health")
+			max_health += upgrade.value
+			current_health += upgrade.value # Soigne en même temps
+			health_changed.emit(current_health, max_health)
+		#"damage":
+			#attack_damage += upgrade.value
+	

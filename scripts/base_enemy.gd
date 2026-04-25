@@ -8,6 +8,8 @@ class_name BaseEnemy
 @export_group("Visuals")
 @export var enemy_color: Color = Color(1, 0, 0) # Rouge par défaut
 
+@export var gem_scene: PackedScene = preload("res://scenes/xp_gem.tscn")
+
 var player: Node2D = null
 var separation_distance: float = 40.0 # Distance à laquelle ils se poussent
 
@@ -51,7 +53,7 @@ func _on_screen_notifier_screen_exited():
 func explode():
 	if not is_visible_in_tree(): return 
 
-	# --- GESTION DU TRAIL ---
+	# --- TRAIL ---
 	if has_node("Trail"):
 		# On arrête de créer de nouvelles particules
 		$Trail.emitting = false 
@@ -59,9 +61,14 @@ func explode():
 	# --- EXPLOSION ---
 	Explosions.spawn_explosion(global_position)
 	
-	# --- DEGATS ---
+	# --- DAMAGE ---
 	if player and player.has_method("take_damage"):
 		player.take_damage(10.0)
+	
+	# --- DROP ---
+	var gem = gem_scene.instantiate()
+	gem.global_position = global_position
+	get_parent().add_child(gem)
 	
 	# --- DISPARITION ---
 	hide()

@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://cl5tixos00j46"]
+
+[ext_resource type="Script" uid="uid://dgjvppfk5by7d" path="res://scripts/upgrade_card.gd" id="1_62kwj"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_fk0rn"]
+[ext_resource type="FontFile" uid="uid://cwybiqnpntt7f" path="res://assets/Xolonium-Regular.ttf" id="3_0hv3p"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_80nyk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_62kwj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_80nyk"]
+bg_color = Color(1, 1, 1, 0.09803922)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_fk0rn"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_0hv3p"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_igsks"]
+font = ExtResource("3_0hv3p")
+font_size = 20
+outline_size = 2
+
+[node name="UpgradeCard" type="PanelContainer" unique_id=228869295]
+custom_minimum_size = Vector2(200, 300)
+offset_right = 200.0
+offset_bottom = 300.0
+script = ExtResource("1_62kwj")
+
+[node name="Button" type="Button" parent="." unique_id=1819335165]
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_80nyk")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_62kwj")
+theme_override_styles/hover = SubResource("StyleBoxFlat_80nyk")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_fk0rn")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_0hv3p")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Button" unique_id=2061941295]
+layout_mode = 0
+offset_right = 200.0
+offset_bottom = 300.0
+alignment = 1
+
+[node name="Icon" type="TextureRect" parent="Button/VBoxContainer" unique_id=852308702]
+layout_mode = 2
+texture = ExtResource("2_fk0rn")
+
+[node name="NameLabel" type="Label" parent="Button/VBoxContainer" unique_id=588805480]
+layout_mode = 2
+label_settings = SubResource("LabelSettings_igsks")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DescriptionLabel" type="Label" parent="Button/VBoxContainer" unique_id=2096777693]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_0hv3p")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LevelLabel" type="Label" parent="Button/VBoxContainer" unique_id=908221096]
+layout_mode = 2
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
