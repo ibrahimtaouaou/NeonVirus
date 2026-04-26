@@ -42,6 +42,7 @@ alignment = 1
 
 [node name="Icon" type="TextureRect" parent="Button/VBoxContainer" unique_id=852308702]
 layout_mode = 2
+size_flags_horizontal = 4
 texture = ExtResource("2_fk0rn")
 
 [node name="NameLabel" type="Label" parent="Button/VBoxContainer" unique_id=588805480]
