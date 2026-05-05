@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ProjectileData" format=3 uid="uid://gy2ifg2ahtdo"]
+
+[ext_resource type="Texture2D" uid="uid://jp5e41f1yjsk" path="res://assets/iron.png" id="1_iron"]
+[ext_resource type="Script" uid="uid://w783f2euhrod" path="res://resources/projectiles/projectile_data.gd" id="1_7sonf"]
+
+[resource]
+script = ExtResource("1_7sonf")
+texture = ExtResource("1_iron")
+metadata/_custom_type_script = "uid://w783f2euhrod"

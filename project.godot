@@ -18,6 +18,8 @@ config/icon="res://icon.svg"
 [autoload]
 
 Explosions="*uid://coxlk5v5we3pw"
+ProjectileManager="*uid://cb8wnhra6j7dd"
+GemManager="*uid://kvlmmqn2lx8o"
 
 [display]
 

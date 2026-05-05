@@ -4,8 +4,8 @@ extends CanvasLayer
 
 @onready var options_container: HBoxContainer = $CenterContainer/VBoxContainer/HBoxContainer
 
-var upg_speed = preload("res://resources/upg_speed.tres")
-var upg_health = preload("res://resources/upg_health.tres")
+var upg_speed = preload("res://resources/upgrades/upg_speed.tres")
+var upg_health = preload("res://resources/upgrades/upg_health.tres")
 var player
 
 func open_menu(upgrade_options: Array):

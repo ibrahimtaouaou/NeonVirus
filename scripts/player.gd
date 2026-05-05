@@ -4,6 +4,7 @@ extends CharacterBody2D
 @export var speed = 300.0
 @export var max_health: float = 1500.0
 @export var xp_to_level: float = 10.0
+@export var grab_radius: float = 250.0
 
 @onready var camera: Camera2D = $Camera2D
 #@onready var level_label: Label = $"../../GameUI/HUD/LevelLabel"
@@ -33,7 +34,7 @@ func camera_shake(intensity: float, time: float):
 	
 	tween.tween_property(camera, "offset", Vector2.ZERO, 0.05)
 
-func take_damage(amount: float):
+func player_take_damage(amount: float):
 	current_health -= amount
 	current_health = clamp(current_health, 0, max_health) # Évite de descendre sous 0
 	health_changed.emit(current_health, max_health)
@@ -47,9 +48,9 @@ func die():
 	get_tree().reload_current_scene()
 
 
-func _on_grab_area_area_entered(area: Area2D) -> void:
-	if area.has_method("collect"):
-			area.collect(self)
+#func _on_grab_area_area_entered(area: Area2D) -> void:
+	#if area.has_method("collect"):
+			#area.collect(self)
 
 func add_xp(amount):
 	current_xp += amount

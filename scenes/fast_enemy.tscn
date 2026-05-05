@@ -1,12 +1,14 @@
 [gd_scene format=3 uid="uid://r437i30nv2ic"]
 
 [ext_resource type="PackedScene" uid="uid://cm1dirfgoot8l" path="res://scenes/base_enemy.tscn" id="1_hu2wp"]
+[ext_resource type="PackedScene" uid="uid://d33ubt1t872jf" path="res://scenes/xp_gem.tscn" id="2_7dcje"]
 
 [node name="BaseEnemy" unique_id=601798470 instance=ExtResource("1_hu2wp")]
 speed = 300.0
-health = null
-contact_damage = null
-enemy_color = null
+health = 5
+contact_damage = 1
+enemy_color = Color(1, 0, 0, 1)
+gem_scene = ExtResource("2_7dcje")
 
 [node name="Body" parent="." index="0" unique_id=1121855645]
 color = Color(0, 0.8216351, 0.13156626, 0.21176471)

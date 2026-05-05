@@ -15,6 +15,7 @@ point_count = 2
 [node name="BaseEnemy" type="Area2D" unique_id=601798470]
 light_mask = 5
 visibility_layer = 2
+collision_layer = 2
 script = ExtResource("1_48uxq")
 
 [node name="Body" type="Polygon2D" parent="." unique_id=1121855645]

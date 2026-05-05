@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://cvhbrct11ost5"]
+
+[ext_resource type="Script" uid="uid://crqip7ilj128k" path="res://scripts/projectile.gd" id="1_q3m7n"]
+[ext_resource type="Texture2D" uid="uid://jp5e41f1yjsk" path="res://assets/iron.png" id="2_softn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qxf0c"]
+radius = 40.0
+
+[node name="Projectile" type="Area2D" unique_id=1173146583]
+collision_layer = 4
+collision_mask = 2
+script = ExtResource("1_q3m7n")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1311544992]
+shape = SubResource("CircleShape2D_qxf0c")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1815309110]
+position = Vector2(0, 9.536743e-07)
+scale = Vector2(1.5, 1.25)
+texture = ExtResource("2_softn")
+
+[node name="DespawnTimer" type="Timer" parent="." unique_id=98854901]
+wait_time = 3.0
+autostart = true
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="timeout" from="DespawnTimer" to="." method="_on_despawn_timer_timeout"]

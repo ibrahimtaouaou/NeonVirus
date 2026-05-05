@@ -1,17 +1,19 @@
 extends Area2D 
 class_name BaseEnemy
 
+
 @export_group("Stats")
 @export var speed: float = 150.0
 @export var health: int = 10
 @export var contact_damage: int = 1
+@export var xp_value: int = 1
 @export_group("Visuals")
 @export var enemy_color: Color = Color(1, 0, 0) # Rouge par défaut
 
-@export var gem_scene: PackedScene = preload("res://scenes/xp_gem.tscn")
 
 var player: Node2D = null
 var separation_distance: float = 40.0 # Distance à laquelle ils se poussent
+var current_health: int = 10
 
 func _process(delta: float):
 	if player == null:
@@ -34,10 +36,10 @@ func _process(delta: float):
 
 	# 3. EXPLOSION SÉCURITÉ
 	if dist_to_player < 10.0:
-		explode()
-		#pass
+		explode(true)
 
 func _ready() -> void:
+	add_to_group("enemy")
 	# On remet les particules "dans" l'ennemi pour le prochain coup
 	$ExplosionParticles.set_as_top_level(false) 
 	$ExplosionParticles.position = Vector2.ZERO # On les recentre
@@ -46,11 +48,14 @@ func _ready() -> void:
 
 func _on_screen_notifier_screen_exited():
 	# Recyclage : on cache et on stoppe tout
-	hide()
+	set_deferred("visible", false)
 	set_process(false)
+	set_physics_process(false)
 	$MainCollision.set_deferred("disabled", true)
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
 
-func explode():
+func explode(collision: bool):
 	if not is_visible_in_tree(): return 
 
 	# --- TRAIL ---
@@ -62,26 +67,53 @@ func explode():
 	Explosions.spawn_explosion(global_position)
 	
 	# --- DAMAGE ---
-	if player and player.has_method("take_damage"):
-		player.take_damage(10.0)
+	if collision and player and player.has_method("player_take_damage"):
+		player.player_take_damage(10)
 	
 	# --- DROP ---
-	var gem = gem_scene.instantiate()
-	gem.global_position = global_position
-	get_parent().add_child(gem)
-	
+	#if gem_scene == null:
+		#print("ERREUR : La scène de gemme est nulle !")
+		#return
+	#var gem = gem_scene.instantiate()
+	#gem.global_position = global_position
+	#get_parent().call_deferred("add_child", gem)
+	GemManager.spawn_gem(global_position, xp_value)
+
 	# --- DISPARITION ---
-	hide()
+	set_deferred("visible", false)
 	$MainCollision.set_deferred("disabled", true)
+	set_deferred("monitoring", false)
+	set_deferred("monitorable", false)
 	set_process(false)
+	set_physics_process(false)
 
 	# --- SHAKE ---
 	if player:
 		player.camera_shake(8.0, 0.15)
 
 
-func _on_area_entered(area: Area2D) -> void:
-	# On vérifie si ce qu'on touche est le joueur
-	if area.is_in_group("player"):
-		#explode()
-		pass
+func reset_enemy():
+	# 1. Reset des statistiques
+	current_health = health
+	
+	# 2. Reset de la physique
+	set_process(true)
+	set_physics_process(true)
+	
+	# 3. Reset des collisions
+	$MainCollision.set_deferred("disabled", false)
+	set_deferred("monitoring", true)
+	set_deferred("monitorable", true)
+	
+	# 4. Reset visuel
+	modulate = Color.WHITE 
+	set_deferred("visible", true)
+	
+	# 5. Relancer les effets (ex: particules de traînée)
+	if has_node("Trail"):
+		$Trail.emitting = true
+
+func take_damage(amount: int):
+	current_health -= amount
+	if current_health <= 0:
+		explode(false)

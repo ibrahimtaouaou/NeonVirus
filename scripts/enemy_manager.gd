@@ -9,12 +9,19 @@ var enemy_pool: Array = []
 func _ready():
 	# 1. On pré-remplit le pool
 	for i in range(pool_size):
-		var random_scene = enemy_templates.pick_random() # Choisit au pif
+		var random_scene = enemy_templates.pick_random()
 		var enemy = random_scene.instantiate()
-		enemy.hide() # On le cache
-		enemy.set_process(false) # On stoppe son script
+		enemy.hide()
+		enemy.set_process(false)
+		enemy.set_physics_process(false)
 		add_child(enemy)
 		enemy_pool.append(enemy)
+		
+		# IMPORTANT: On désactive les collisions du pool au départ
+		if enemy.has_node("MainCollision"):
+			enemy.get_node("MainCollision").disabled = true
+		enemy.monitoring = false
+		enemy.monitorable = false
 
 func _on_spawn_timer_timeout():
 	spawn_enemy()
@@ -31,11 +38,12 @@ func spawn_enemy():
 			
 			# 4. On réactive l'ennemi
 			enemy.global_position = spawn_pos
+			enemy.force_update_transform()
 			enemy.show()
 			enemy.set_process(true)
 			# On réactive sa collision si elle était coupée
-			enemy.get_node("MainCollision").disabled = false 
-			enemy.get_node("Trail").emitting = true 
+			if enemy.has_method("reset_enemy"):
+				enemy.reset_enemy()
 
 func get_available_enemy():
 	for e in enemy_pool:

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://3f64jkc4hvmm"]
 
-[ext_resource type="Script" uid="uid://b142l6lssbx4b" path="res://scripts/upgrade_data.gd" id="1_lcbdg"]
+[ext_resource type="Script" uid="uid://b142l6lssbx4b" path="res://resources/upgrades/upgrade_data.gd" id="1_lcbdg"]
 [ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="1_y8dmr"]
 
 [resource]
