@@ -16,9 +16,10 @@ var separation_distance: float = 40.0 # Distance à laquelle ils se poussent
 var current_health: int = 10
 
 func _process(delta: float):
-	if player == null:
+	if not is_instance_valid(player): 
 		player = get_tree().get_first_node_in_group("player")
-		if player == null: return
+		if not is_instance_valid(player): 
+			return
 	
 	var dist_to_player = global_position.distance_to(player.global_position)
 	var dir_to_player = (player.global_position - global_position).normalized()
@@ -34,10 +35,6 @@ func _process(delta: float):
 		var target_angle = dir_to_player.angle()
 		rotation = lerp_angle(rotation, target_angle, 0.2)
 
-	# 3. EXPLOSION SÉCURITÉ
-	if dist_to_player < 10.0:
-		explode(true)
-
 func _ready() -> void:
 	add_to_group("enemy")
 	# On remet les particules "dans" l'ennemi pour le prochain coup
@@ -45,6 +42,11 @@ func _ready() -> void:
 	$ExplosionParticles.position = Vector2.ZERO # On les recentre
 	$ExplosionParticles.emitting = false
 	$Trail.emitting = true
+	if not body_entered.is_connected(_on_body_entered):
+		body_entered.connect(_on_body_entered)
+
+func set_player(player_ref):
+	player = player_ref
 
 func _on_screen_notifier_screen_exited():
 	# Recyclage : on cache et on stoppe tout
@@ -54,6 +56,10 @@ func _on_screen_notifier_screen_exited():
 	$MainCollision.set_deferred("disabled", true)
 	set_deferred("monitoring", false)
 	set_deferred("monitorable", false)
+
+func _on_body_entered(body: Node2D) -> void:
+	if body.is_in_group("player"):
+		explode(true)
 
 func explode(collision: bool):
 	if not is_visible_in_tree(): return 
@@ -67,16 +73,10 @@ func explode(collision: bool):
 	Explosions.spawn_explosion(global_position)
 	
 	# --- DAMAGE ---
-	if collision and player and player.has_method("player_take_damage"):
+	if collision and player:
 		player.player_take_damage(10)
 	
 	# --- DROP ---
-	#if gem_scene == null:
-		#print("ERREUR : La scène de gemme est nulle !")
-		#return
-	#var gem = gem_scene.instantiate()
-	#gem.global_position = global_position
-	#get_parent().call_deferred("add_child", gem)
 	GemManager.spawn_gem(global_position, xp_value)
 
 	# --- DISPARITION ---

@@ -19,19 +19,12 @@ func _on_area_entered(area):
 		return
 		
 	if area.has_method("take_damage"):
-		print("Projectile hit: ", area.name, " (Parent: ", area.get_parent().name if area.get_parent() else "None", ")")
+		#print("Projectile hit: ", area.name, " (Parent: ", area.get_parent().name if area.get_parent() else "None", ")")
 		is_active = false
 		area.take_damage(damage)
 		ProjectileManager._return_to_pool(self)
-	else:
-		print("Projectile overlapped with non-damageable: ", area.name)
-
-## Optionnel : Supprimer la balle si elle sort de l'écran pour les perfs
-#func _on_visible_on_screen_notifier_2d_screen_exited():
-	#if is_active:
-		#print("Projectile exited screen")
-		#is_active = false
-		#ProjectileManager._return_to_pool(self)
+	#else:
+		#print("Projectile overlapped with non-damageable: ", area.name)
 
 func setup(data: ProjectileData, pos: Vector2, dir: Vector2):
 	# 1. On active le projectile

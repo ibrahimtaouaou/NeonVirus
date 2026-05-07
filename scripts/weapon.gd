@@ -14,10 +14,6 @@ func find_closest_enemy():
 	var shortest_distance = range_radius
 	
 	for enemy in enemies:
-		# Safety: never target the player or its parts
-		if enemy.is_in_group("player") or (enemy.get_parent() and enemy.get_parent().is_in_group("player")):
-			continue
-
 		# Use is_visible_in_tree() to be sure the enemy is active
  		# and not just hidden via deferred call
 		if not enemy.is_visible_in_tree(): continue
@@ -31,10 +27,5 @@ func find_closest_enemy():
 	return closest_enemy
 
 func shoot(target):
-	#print("--- SHOOT EVENT ---")
-	#print("Target Name: ", target.name)
-	#print("Target Class: ", target.get_class())
-	#print("Target Parent: ", target.get_parent().name if target.get_parent() else "None")
-	
 	var direction = (target.global_position - global_position).normalized()
 	ProjectileManager.spawn_projectile(current_projectile_data, global_position, direction)

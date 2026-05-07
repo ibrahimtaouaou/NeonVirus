@@ -3,10 +3,10 @@
 [ext_resource type="Script" uid="uid://dtwhgdqkgp8nq" path="res://scripts/base_enemy.gd" id="1_48uxq"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7p1mj"]
-radius = 25.298222
+radius = 64.49806
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_md0e3"]
-radius = 80.399
+radius = 40.0
 
 [sub_resource type="Curve" id="Curve_7p1mj"]
 _data = [Vector2(0.010638304, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
@@ -33,7 +33,6 @@ light_mask = 2
 visibility_layer = 0
 
 [node name="SeparationShape" type="CollisionShape2D" parent="SeparationArea" unique_id=1041945156]
-position = Vector2(-64, 0)
 shape = SubResource("CircleShape2D_md0e3")
 
 [node name="ScreenNotifier" type="VisibleOnScreenNotifier2D" parent="." unique_id=1438331648]
@@ -75,4 +74,5 @@ initial_velocity_min = 150.0
 initial_velocity_max = 150.0
 
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="screen_exited" from="ScreenNotifier" to="." method="_on_screen_notifier_screen_exited"]

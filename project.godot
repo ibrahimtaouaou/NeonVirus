@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Explosions="*uid://coxlk5v5we3pw"
 ProjectileManager="*uid://cb8wnhra6j7dd"
 GemManager="*uid://kvlmmqn2lx8o"
+GameEvents="*uid://cysv1x1y6pqmb"
 
 [display]
 

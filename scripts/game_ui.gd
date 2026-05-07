@@ -8,16 +8,24 @@ extends CanvasLayer
 
 func _ready():
 	# On trouve le joueur pour écouter ses signaux
+	GameEvents.player_spawned.connect(_setup_with_player)
+	
 	var player = get_tree().get_first_node_in_group("player")
 	if player:
-		player.health_changed.connect(_on_health_updated)
-		player.xp_changed.connect(_on_xp_updated)
-		player.leveled_up.connect(_on_level_up)
-		
-		# Initialisation des barres
-		_on_health_updated(player.current_health, player.max_health)
-		_on_xp_updated(player.current_xp, player.xp_to_level)
-		level_label.text = "Level : %s"  %player.current_level
+		_setup_with_player(player)
+
+func _setup_with_player(player_node):
+	# Prevents connecting mulitple times
+	if player_node.health_changed.is_connected(_on_health_updated): return
+
+	player_node.health_changed.connect(_on_health_updated)
+	player_node.xp_changed.connect(_on_xp_updated)
+	player_node.leveled_up.connect(_on_level_up)
+	
+	# Initialization of bars
+	_on_health_updated(player_node.current_health, player_node.max_health)
+	_on_xp_updated(player_node.current_xp, player_node.xp_to_level)
+	level_label.text = "Level : %s"  %player_node.current_level
 
 func _on_health_updated(val, max_val):
 	health_bar.max_value = max_val

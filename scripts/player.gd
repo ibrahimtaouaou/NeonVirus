@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 @export_group("Stats")
 @export var speed = 300.0
-@export var max_health: float = 1500.0
+@export var max_health: float = 100.0
 @export var xp_to_level: float = 10.0
 @export var grab_radius: float = 250.0
 
@@ -13,10 +13,14 @@ signal health_changed(new_val, max_val)
 signal xp_changed(new_val, max_val)
 signal leveled_up(new_level)
 
-var current_health: float = 1500.0
+var current_health: float = 100.0
 var current_xp: float = 0.0
 var current_level: int = 1
 var levels_pending: int = 0
+var is_dead: bool = false
+
+func _ready() -> void:
+	GameEvents.emit_player_spawned(self)
 
 func _physics_process(_delta):
 	# On récupère les directions (touches fléchées, ZQSD ou Joystick mobile)
@@ -34,6 +38,10 @@ func camera_shake(intensity: float, time: float):
 	
 	tween.tween_property(camera, "offset", Vector2.ZERO, 0.05)
 
+func _on_grab_area_area_entered(area: Area2D) -> void:
+	if area.is_in_group("gems") and area.is_active and not is_dead:
+		area.collect(self)
+
 func player_take_damage(amount: float):
 	current_health -= amount
 	current_health = clamp(current_health, 0, max_health) # Évite de descendre sous 0
@@ -43,14 +51,10 @@ func player_take_damage(amount: float):
 		die()
 
 func die():
+	if is_dead: return
+	is_dead = true
 	print("Game Over")
-	# Pour l'instant on reload juste la scène
-	get_tree().reload_current_scene()
-
-
-#func _on_grab_area_area_entered(area: Area2D) -> void:
-	#if area.has_method("collect"):
-			#area.collect(self)
+	get_tree().call_deferred("reload_current_scene")
 
 func add_xp(amount):
 	current_xp += amount
@@ -79,4 +83,3 @@ func apply_upgrade(upgrade: UpgradeData):
 			health_changed.emit(current_health, max_health)
 		#"damage":
 			#attack_damage += upgrade.value
-	

@@ -5,6 +5,7 @@ extends Node2D
 @export var spawn_radius: float = 1500.0 # Distance de spawn (hors écran)
 
 var enemy_pool: Array = []
+var player_ref: Node2D
 
 func _ready():
 	# 1. On pré-remplit le pool
@@ -22,28 +23,34 @@ func _ready():
 			enemy.get_node("MainCollision").disabled = true
 		enemy.monitoring = false
 		enemy.monitorable = false
+	
+	GameEvents.player_spawned.connect(func(p): player_ref = p)
+	player_ref = get_tree().get_first_node_in_group("player")
 
 func _on_spawn_timer_timeout():
 	spawn_enemy()
 
 func spawn_enemy():
+	if not is_instance_valid(player_ref) or player_ref.is_dead: return
+	
 	# 2. On cherche un ennemi disponible dans le pool
 	var enemy = get_available_enemy()
 	if enemy:
 		# 3. Calcul de la position de spawn en cercle autour du joueur
-		var player = get_tree().get_first_node_in_group("player")
-		if player:
-			var random_angle = randf() * TAU
-			var spawn_pos = player.global_position + Vector2.RIGHT.rotated(random_angle) * spawn_radius
-			
-			# 4. On réactive l'ennemi
-			enemy.global_position = spawn_pos
-			enemy.force_update_transform()
-			enemy.show()
-			enemy.set_process(true)
-			# On réactive sa collision si elle était coupée
-			if enemy.has_method("reset_enemy"):
-				enemy.reset_enemy()
+		#var player = get_tree().get_first_node_in_group("player")
+		#if player:
+		var random_angle = randf() * TAU
+		var spawn_pos = player_ref.global_position + Vector2.RIGHT.rotated(random_angle) * spawn_radius
+		
+		# 4. On réactive l'ennemi
+		enemy.global_position = spawn_pos
+		enemy.set_player(player_ref)
+		enemy.force_update_transform()
+		enemy.show()
+		enemy.set_process(true)
+		# On réactive sa collision si elle était coupée
+		if enemy.has_method("reset_enemy"):
+			enemy.reset_enemy()
 
 func get_available_enemy():
 	for e in enemy_pool:
